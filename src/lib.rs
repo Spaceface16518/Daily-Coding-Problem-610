@@ -1,4 +1,4 @@
-//#![cfg_attr(test, no_std)]
+#![cfg_attr(not(test), no_std)]
 
 pub fn div(mut lhs: u32, rhs: u32) -> u32 {
     if rhs > lhs {
