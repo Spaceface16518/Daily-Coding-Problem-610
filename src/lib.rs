@@ -1,28 +1,20 @@
 //#![cfg_attr(test, no_std)]
 
-pub fn div(lhs: u32, rhs: u32) -> u32 {
-    // find the difference between the most significant bits of the two numbers
-    let misalign = if let Some(diff) = dbg!(rhs.leading_zeros()).checked_sub(dbg!(lhs.leading_zeros())) {
-        diff
-    } else {
-        // if the denominator is greater than the numerator, return 0
+pub fn div(mut lhs: u32, rhs: u32) -> u32 {
+    if rhs > lhs {
         return 0;
-    };
-    let mut n = dbg!(lhs as u64);
-    let d = dbg!((rhs as u64) << dbg!(misalign) as u64);
+    }
+    let mut quotient = 0;
 
-    let mut quotient = 1;
-
-    for _ in 0..32 {
-        if n >= d {
-            quotient = quotient | 1; // set lsb to 1
-            quotient <<= 1;
-            n -= d;
+    for i in (0..32).rev() {
+        quotient <<= 1;
+        if rhs <= lhs >> i {
+            quotient |= 1;
+            lhs -= rhs << i;
         }
-        n <<= 1;
     }
 
-    quotient >> misalign
+    quotient
 }
 
 #[cfg(test)]
@@ -44,7 +36,7 @@ mod special_cases {
     }
 
     gen_special_case!(0, 1 => 0);
-    //gen_special_case!(134217728, 4096 => 32768);
+    gen_special_case!(134217728, 4096 => 32768);
     gen_special_case!(70, 8 => 8);
     gen_special_case!(9, 3 => 3);
 }

@@ -4,7 +4,6 @@ use proptest::prelude::*;
 proptest! {
     #[test]
     fn matches_native_division(lhs in 0u32.., rhs in 1u32..) {
-        prop_assume!(lhs >= rhs);
         assert_eq!(div(lhs, rhs), lhs / rhs)
     }
 
