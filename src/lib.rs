@@ -1,9 +1,6 @@
 #![cfg_attr(not(test), no_std)]
 
 pub fn div(mut lhs: u32, rhs: u32) -> u32 {
-    if rhs > lhs {
-        return 0;
-    }
     let mut quotient = 0;
 
     for i in (0..32).rev() {
